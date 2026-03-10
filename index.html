@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mistique AI — Create Music with WhatsApp</title>
+  <meta name="description" content="Mistique AI lets you create custom AI-generated songs via WhatsApp. Just send your lyrics, choose your style, and receive a unique song.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --dark: #080808;
+      --dark-2: #0f0f0f;
+      --dark-3: #1a1a1a;
+      --text: #e8e0d0;
+      --text-muted: #8a8070;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 32px; height: 32px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.15s ease;
+      opacity: 0.5;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.9), transparent);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .logo span { font-style: italic; color: var(--text); }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--gold); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    }
+
+    .hero-lines {
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 50%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 59px,
+        rgba(201,168,76,0.05) 59px,
+        rgba(201,168,76,0.05) 60px
+      );
+    }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.3s;
+    }
+
+    .hero h1 {
+      font-size: clamp(3.5rem, 8vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.5s;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.7s;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.9s;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--dark);
+      padding: 1rem 2.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: none;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      color: var(--text-muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 1px solid var(--text-muted);
+      padding-bottom: 2px;
+      transition: all 0.3s;
+      cursor: none;
+    }
+    .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* SCROLL INDICATOR */
+    .scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      left: 4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 1.2s;
+    }
+    .scroll-hint::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      animation: expandLine 1.5s ease infinite;
+    }
+
+    /* HOW IT WORKS */
+    .section {
+      padding: 8rem 4rem;
+      position: relative;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section h2 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 5rem;
+    }
+
+    .section h2 em { font-style: italic; color: var(--gold); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4rem;
+    }
+
+    .step {
+      position: relative;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .step-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .step h3 {
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .step p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: rgba(201,168,76,0.1);
+    }
+
+    .feature {
+      background: var(--dark-2);
+      padding: 3.5rem;
+      transition: background 0.3s;
+    }
+    .feature:hover { background: var(--dark-3); }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature h3 {
+      font-size: 1.5rem;
+      font-weight: 300;
+      margin-bottom: 0.8rem;
+    }
+
+    .feature p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* WHATSAPP DEMO */
+    .demo-section {
+      padding: 8rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+    }
+
+    .phone-mockup {
+      background: var(--dark-3);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 8px;
+      padding: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    .phone-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+    }
+
+    .phone-dot {
+      width: 8px; height: 8px;
+      background: #25D366;
+      border-radius: 50%;
+    }
+
+    .msg {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .msg.bot { align-items: flex-start; }
+    .msg.user { align-items: flex-end; }
+
+    .msg-bubble {
+      padding: 0.8rem 1.2rem;
+      border-radius: 4px;
+      max-width: 85%;
+      line-height: 1.6;
+      font-size: 0.75rem;
+    }
+
+    .msg.bot .msg-bubble {
+      background: var(--dark);
+      color: var(--text);
+      border-left: 2px solid var(--gold);
+    }
+
+    .msg.user .msg-bubble {
+      background: rgba(201,168,76,0.15);
+      color: var(--text);
+    }
+
+    .msg-time {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    /* PRICING */
+    .pricing-card {
+      background: var(--dark-3);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 4rem;
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .price {
+      font-size: 5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      margin: 1.5rem 0;
+    }
+
+    .price sup { font-size: 2rem; vertical-align: super; }
+    .price-note { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+    .price-list {
+      list-style: none;
+      margin-bottom: 3rem;
+      text-align: left;
+    }
+
+    .price-list li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      color: var(--text-muted);
+      font-size: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .price-list li::before {
+      content: '—';
+      color: var(--gold);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 4rem;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 4rem 0 auto;
+      opacity: 0.4;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes expandLine {
+      0%, 100% { transform: scaleX(1); }
+      50% { transform: scaleX(1.5); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1.5rem 2rem; }
+      .hero, .section { padding-left: 2rem; padding-right: 2rem; }
+      .hero h1 { font-size: 3.5rem; }
+      .steps { grid-template-columns: 1fr; gap: 3rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .demo-section { grid-template-columns: 1fr; gap: 4rem; padding: 4rem 2rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav>
+    <div class="logo">Mistique <span>AI</span></div>
+    <a href="mailto:contact@mistiqueai.com">contact@mistiqueai.com</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-tag">AI Music Generation via WhatsApp</div>
+    <h1>Your song.<br><em>In minutes.</em></h1>
+    <p>Send your lyrics, choose your style, receive a custom AI-generated song — all through WhatsApp. No app. No signup. Just music.</p>
+    <div class="hero-cta">
+      <a href="https://wa.me/15186552535" class="btn-primary">Start on WhatsApp</a>
+      <a href="#how" class="btn-ghost">See how it works</a>
+    </div>
+    <div class="scroll-hint">Scroll to explore</div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="section-label">Process</div>
+    <h2>Three steps to<br>your <em>perfect song</em></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01 / Send</div>
+        <h3>Your Lyrics or Idea</h3>
+        <p>Write your own lyrics or simply describe what you want — love song, birthday dedication, a feeling. We handle the rest.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02 / Choose</div>
+        <h3>Style & Voice</h3>
+        <p>Pick your music style — Pop, Jazz, Classical, Hip-Hop — and select the vocal tone that fits your vision.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03 / Receive</div>
+        <h3>Your Song</h3>
+        <p>Within minutes, a fully produced AI song arrives in your WhatsApp — ready to stream, share, or download.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="section-label">Features</div>
+    <h2>Built for <em>everyone</em></h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">🎵</div>
+        <h3>Any Language</h3>
+        <p>Generate songs in Azerbaijani, English, Turkish, Russian — or any language you write in. Our AI understands your words.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🎸</div>
+        <h3>Any Style</h3>
+        <p>Pop, meyxana, jazz, hip-hop, classical, electronic — from traditional Azerbaijani to global genres, we cover it all.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📱</div>
+        <h3>Just WhatsApp</h3>
+        <p>No app to download, no account to create. If you have WhatsApp, you have everything you need to create music.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>Ready in Minutes</h3>
+        <p>From your first message to a finished song in under 3 minutes. AI-powered generation delivers studio-quality results fast.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="demo-section" id="demo">
+    <div>
+      <div class="section-label">Live Demo</div>
+      <h2>See it in <em>action</em></h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">A real conversation with SunoBot. Just text, choose, and receive your song.</p>
+      <a href="https://wa.me/15186552535" class="btn-primary">Try it now →</a>
+    </div>
+    <div class="phone-mockup">
+      <div class="phone-header">
+        <div class="phone-dot"></div>
+        SunoBot · +1 518 655 2535
+      </div>
+      <div class="msg bot">
+        <div class="msg-bubble">🎵 Welcome to SunoBot! Do you have your lyrics ready?<br><br>1️⃣ Yes — I have lyrics ready<br>2️⃣ No — Help me generate</div>
+        <div class="msg-time">9:41 PM</div>
+      </div>
+      <div class="msg user">
+        <div class="msg-bubble">2</div>
+        <div class="msg-time">9:41 PM ✓✓</div>
+      </div>
+      <div class="msg bot">
+        <div class="msg-bubble">🎭 Describe what you want the song to be about in 5-10 sentences...</div>
+        <div class="msg-time">9:41 PM</div>
+      </div>
+      <div class="msg user">
+        <div class="msg-bubble">A birthday song for my daughter turning 15. She wants to be a doctor...</div>
+        <div class="msg-time">9:42 PM ✓✓</div>
+      </div>
+      <div class="msg bot">
+        <div class="msg-bubble">✅ Here are your generated lyrics:<br><br>[Verse 1]<br>Qızımın ad günüdür, on beş yaşı olur<br>Ona şirindil deyirəm...</div>
+        <div class="msg-time">9:42 PM</div>
+      </div>
+      <div class="msg bot">
+        <div class="msg-bubble">🎵 Your song is ready!<br><br>🎧 Listen: cdn.suno.ai/song_abc123.mp3</div>
+        <div class="msg-time">9:45 PM</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo" style="font-size: 1rem;">Mistique <span>AI</span></div>
+    <p>© 2026 Mistique AI · <a href="mailto:contact@mistiqueai.com">contact@mistiqueai.com</a> · WhatsApp: +1 518 655 2535</p>
+    <p style="color: var(--text-muted);">AI Music Generation Platform</p>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX - 4 + 'px';
+      cursor.style.top = mouseY - 4 + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX - 16) * 0.12;
+      ringY += (mouseY - ringY - 16) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // Hover effects
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2)';
+        ring.style.transform = 'scale(1.5)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.transform = 'scale(1)';
+      });
+    });
+
+    // Fade in on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.step, .feature, .pricing-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
