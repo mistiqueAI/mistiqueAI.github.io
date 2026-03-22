@@ -1,663 +1,748 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: smooth;">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mistique AI — Create Music with WhatsApp</title>
-  <meta name="description" content="Mistique AI lets you create custom AI-generated songs via WhatsApp. Just send your lyrics, choose your style, and receive a unique song.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MistiqueAI — AI-powered song generator on WhatsApp. Send a message, describe your song, and receive an original AI-generated track in minutes.">
+    <meta property="og:title" content="MistiqueAI — AI Song Generator on WhatsApp">
+    <meta property="og:description" content="Whisper it. We'll sing it. AI-powered song generator on WhatsApp. Create original songs in Azerbaijani, Turkish, English, and Russian.">
+    <meta property="og:image" content="/assets/og-card.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="/assets/favicon.png">
+    <title>MistiqueAI — AI Song Generator on WhatsApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    :root {
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --dark: #080808;
-      --dark-2: #0f0f0f;
-      --dark-3: #1a1a1a;
-      --text: #e8e0d0;
-      --text-muted: #8a8070;
-    }
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #e8c84a;
+            --gold-dark: #b8951f;
+            --dark: #0a0a0a;
+            --dark-card: #111;
+            --dark-card-hover: #161616;
+            --text: #e0e0e0;
+            --text-muted: #888;
+        }
 
-    html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    body {
-      background: var(--dark);
-      color: var(--text);
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      overflow-x: hidden;
-      cursor: none;
-    }
+        /* Gold gradient top line */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark), transparent);
+            z-index: 10000;
+        }
 
-    /* Custom cursor */
-    .cursor {
-      width: 8px; height: 8px;
-      background: var(--gold);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.1s;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      width: 32px; height: 32px;
-      border: 1px solid var(--gold);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      transition: all 0.15s ease;
-      opacity: 0.5;
-    }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
 
-    /* Grain overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9997;
-      opacity: 0.4;
-    }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 2rem 4rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: linear-gradient(to bottom, rgba(8,8,8,0.9), transparent);
-    }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 300;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
+        /* ── Particle background ── */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
 
-    .logo span { font-style: italic; color: var(--text); }
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+        }
 
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-    nav a:hover { color: var(--gold); }
+        .particle:nth-child(1)  { left: 5%;  animation-duration: 18s; animation-delay: 0s; }
+        .particle:nth-child(2)  { left: 12%; animation-duration: 22s; animation-delay: 2s; }
+        .particle:nth-child(3)  { left: 20%; animation-duration: 16s; animation-delay: 4s; }
+        .particle:nth-child(4)  { left: 30%; animation-duration: 20s; animation-delay: 1s; }
+        .particle:nth-child(5)  { left: 40%; animation-duration: 24s; animation-delay: 3s; }
+        .particle:nth-child(6)  { left: 50%; animation-duration: 17s; animation-delay: 5s; }
+        .particle:nth-child(7)  { left: 60%; animation-duration: 21s; animation-delay: 0.5s; }
+        .particle:nth-child(8)  { left: 70%; animation-duration: 19s; animation-delay: 2.5s; }
+        .particle:nth-child(9)  { left: 80%; animation-duration: 23s; animation-delay: 1.5s; }
+        .particle:nth-child(10) { left: 90%; animation-duration: 15s; animation-delay: 4.5s; }
+        .particle:nth-child(11) { left: 15%; animation-duration: 25s; animation-delay: 6s; width: 3px; height: 3px; }
+        .particle:nth-child(12) { left: 35%; animation-duration: 20s; animation-delay: 7s; }
+        .particle:nth-child(13) { left: 55%; animation-duration: 18s; animation-delay: 3.5s; width: 3px; height: 3px; }
+        .particle:nth-child(14) { left: 75%; animation-duration: 22s; animation-delay: 5.5s; }
+        .particle:nth-child(15) { left: 95%; animation-duration: 16s; animation-delay: 8s; }
 
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 0 4rem;
-      position: relative;
-      overflow: hidden;
-    }
+        @keyframes floatParticle {
+            0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+            10%  { opacity: 0.6; }
+            50%  { opacity: 0.3; }
+            90%  { opacity: 0.5; }
+            100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+        }
 
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
-    }
+        /* ── Fade-in animation ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
 
-    .hero-lines {
-      position: absolute;
-      right: 0; top: 0; bottom: 0;
-      width: 50%;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 59px,
-        rgba(201,168,76,0.05) 59px,
-        rgba(201,168,76,0.05) 60px
-      );
-    }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    .hero-tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.3s;
-    }
+        /* ── Navigation ── */
+        .nav {
+            position: fixed;
+            top: 3px;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
 
-    .hero h1 {
-      font-size: clamp(3.5rem, 8vw, 8rem);
-      font-weight: 300;
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.5s;
-    }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
 
-    .hero h1 em {
-      font-style: italic;
-      color: var(--gold);
-      display: block;
-    }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    .hero p {
-      font-size: 1.3rem;
-      font-weight: 300;
-      color: var(--text-muted);
-      max-width: 500px;
-      line-height: 1.7;
-      margin-bottom: 3rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.7s;
-    }
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-    .hero-cta {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 0.9s;
-    }
+        .nav-brand-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
 
-    .btn-primary {
-      background: var(--gold);
-      color: var(--dark);
-      padding: 1rem 2.5rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-      cursor: none;
-    }
-    .btn-primary:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
+        .nav-brand-text span {
+            color: var(--gold);
+        }
 
-    .btn-ghost {
-      color: var(--text-muted);
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-bottom: 1px solid var(--text-muted);
-      padding-bottom: 2px;
-      transition: all 0.3s;
-      cursor: none;
-    }
-    .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
 
-    /* SCROLL INDICATOR */
-    .scroll-hint {
-      position: absolute;
-      bottom: 3rem;
-      left: 4rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 1.2s;
-    }
-    .scroll-hint::before {
-      content: '';
-      width: 40px;
-      height: 1px;
-      background: var(--gold);
-      animation: expandLine 1.5s ease infinite;
-    }
+        .nav-cta:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+        }
 
-    /* HOW IT WORKS */
-    .section {
-      padding: 8rem 4rem;
-      position: relative;
-    }
+        .nav-cta svg {
+            width: 16px;
+            height: 16px;
+        }
 
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
+        /* ── Hero ── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+        }
 
-    .section h2 {
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 300;
-      line-height: 1.1;
-      margin-bottom: 5rem;
-    }
+        .hero-content {
+            max-width: 680px;
+        }
 
-    .section h2 em { font-style: italic; color: var(--gold); }
+        .hero-logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            object-fit: cover;
+            margin-bottom: 40px;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.15), 0 0 80px rgba(212, 175, 55, 0.05);
+        }
 
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4rem;
-    }
+        .hero-title {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            font-weight: 700;
+            letter-spacing: 6px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
 
-    .step {
-      position: relative;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(201,168,76,0.2);
-    }
+        .hero-title span {
+            color: var(--gold);
+        }
 
-    .step-num {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-    }
+        .hero-tagline {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
 
-    .step h3 {
-      font-size: 1.8rem;
-      font-weight: 300;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
+        .hero-sub {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
 
-    .step p {
-      font-size: 1rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-    }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 50px;
+            letter-spacing: 1px;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
 
-    /* FEATURES */
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      background: rgba(201,168,76,0.1);
-    }
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(212, 175, 55, 0.35);
+        }
 
-    .feature {
-      background: var(--dark-2);
-      padding: 3.5rem;
-      transition: background 0.3s;
-    }
-    .feature:hover { background: var(--dark-3); }
+        .btn-primary svg {
+            width: 20px;
+            height: 20px;
+        }
 
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-    }
+        /* ── Section common ── */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 0;
+        }
 
-    .feature h3 {
-      font-size: 1.5rem;
-      font-weight: 300;
-      margin-bottom: 0.8rem;
-    }
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 60px;
+            letter-spacing: 2px;
+        }
 
-    .feature p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-    }
+        .section-title span {
+            color: var(--gold);
+        }
 
-    /* WHATSAPP DEMO */
-    .demo-section {
-      padding: 8rem 4rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8rem;
-      align-items: center;
-    }
+        /* ── How It Works ── */
+        .steps {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 40px;
+            position: relative;
+        }
 
-    .phone-mockup {
-      background: var(--dark-3);
-      border: 1px solid rgba(201,168,76,0.15);
-      border-radius: 8px;
-      padding: 2rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.8rem;
-    }
+        /* Connecting line on desktop */
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: calc(33.33% - 10px);
+            right: calc(33.33% - 10px);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
 
-    .phone-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(201,168,76,0.1);
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-    }
+        .step-card {
+            flex: 1;
+            max-width: 300px;
+            background: var(--dark-card);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            border-radius: 16px;
+            padding: 40px 28px 36px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
 
-    .phone-dot {
-      width: 8px; height: 8px;
-      background: #25D366;
-      border-radius: 50%;
-    }
+        .step-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
 
-    .msg {
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-    }
+        .step-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
 
-    .msg.bot { align-items: flex-start; }
-    .msg.user { align-items: flex-end; }
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 20px;
+            color: var(--gold);
+        }
 
-    .msg-bubble {
-      padding: 0.8rem 1.2rem;
-      border-radius: 4px;
-      max-width: 85%;
-      line-height: 1.6;
-      font-size: 0.75rem;
-    }
+        .step-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fff;
+        }
 
-    .msg.bot .msg-bubble {
-      background: var(--dark);
-      color: var(--text);
-      border-left: 2px solid var(--gold);
-    }
+        .step-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
 
-    .msg.user .msg-bubble {
-      background: rgba(201,168,76,0.15);
-      color: var(--text);
-    }
+        /* ── Features ── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
 
-    .msg-time {
-      font-size: 0.6rem;
-      color: var(--text-muted);
-      margin-top: 0.3rem;
-    }
+        .feature-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            border-left: 3px solid var(--gold);
+            border-radius: 12px;
+            padding: 32px 28px;
+            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+        }
 
-    /* PRICING */
-    .pricing-card {
-      background: var(--dark-3);
-      border: 1px solid rgba(201,168,76,0.2);
-      padding: 4rem;
-      max-width: 500px;
-      margin: 0 auto;
-      text-align: center;
-    }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            background: var(--dark-card-hover);
+            border-color: rgba(212, 175, 55, 0.15);
+            border-left-color: var(--gold-light);
+        }
 
-    .price {
-      font-size: 5rem;
-      font-weight: 300;
-      color: var(--gold);
-      line-height: 1;
-      margin: 1.5rem 0;
-    }
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
 
-    .price sup { font-size: 2rem; vertical-align: super; }
-    .price-note { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+        .feature-card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
 
-    .price-list {
-      list-style: none;
-      margin-bottom: 3rem;
-      text-align: left;
-    }
+        .feature-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
 
-    .price-list li {
-      padding: 0.8rem 0;
-      border-bottom: 1px solid rgba(201,168,76,0.1);
-      color: var(--text-muted);
-      font-size: 1rem;
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
+        /* ── CTA Section ── */
+        .cta-section {
+            text-align: center;
+            padding: 100px 0 120px;
+        }
 
-    .price-list li::before {
-      content: '—';
-      color: var(--gold);
-      font-family: 'DM Mono', monospace;
-    }
+        .cta-section h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 600;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
 
-    /* FOOTER */
-    footer {
-      padding: 4rem;
-      border-top: 1px solid rgba(201,168,76,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
 
-    footer p {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      letter-spacing: 0.15em;
-    }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
 
-    footer a {
-      color: var(--gold);
-      text-decoration: none;
-    }
+        .btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.08);
+            border-color: var(--gold);
+            transform: translateY(-1px);
+        }
 
-    /* DIVIDER */
-    .divider {
-      width: 60px;
-      height: 1px;
-      background: var(--gold);
-      margin: 0 4rem 0 auto;
-      opacity: 0.4;
-    }
+        .btn-secondary svg {
+            width: 18px;
+            height: 18px;
+        }
 
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        /* ── Footer ── */
+        .footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid rgba(212, 175, 55, 0.08);
+            padding: 48px 0 40px;
+            text-align: center;
+        }
 
-    @keyframes expandLine {
-      0%, 100% { transform: scaleX(1); }
-      50% { transform: scaleX(1.5); }
-    }
+        .footer-watermark {
+            width: 60px;
+            opacity: 0.35;
+            margin-bottom: 20px;
+        }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      nav { padding: 1.5rem 2rem; }
-      .hero, .section { padding-left: 2rem; padding-right: 2rem; }
-      .hero h1 { font-size: 3.5rem; }
-      .steps { grid-template-columns: 1fr; gap: 3rem; }
-      .features-grid { grid-template-columns: 1fr; }
-      .demo-section { grid-template-columns: 1fr; gap: 4rem; padding: 4rem 2rem; }
-      footer { flex-direction: column; gap: 1rem; text-align: center; }
-    }
-  </style>
+        .footer-copy {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .steps::before {
+                display: none;
+            }
+
+            .step-card {
+                max-width: 400px;
+                width: 100%;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 100px 24px 60px;
+            }
+
+            .hero-logo {
+                width: 160px;
+                height: 160px;
+                margin-bottom: 32px;
+            }
+
+            .hero-title {
+                letter-spacing: 3px;
+            }
+
+            section {
+                padding: 72px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-cta span {
+                display: none;
+            }
+
+            .nav-cta {
+                padding: 10px 14px;
+            }
+
+            .hero-logo {
+                width: 140px;
+                height: 140px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
-
-  <nav>
-    <div class="logo">Mistique <span>AI</span></div>
-    <a href="mailto:contact@mistiqueai.com">contact@mistiqueai.com</a>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-lines"></div>
-    <div class="hero-tag">AI Music Generation via WhatsApp</div>
-    <h1>Your song.<br><em>In minutes.</em></h1>
-    <p>Send your lyrics, choose your style, receive a custom AI-generated song — all through WhatsApp. No app. No signup. Just music.</p>
-    <div class="hero-cta">
-      <a href="https://wa.me/15186552535" class="btn-primary">Start on WhatsApp</a>
-      <a href="#how" class="btn-ghost">See how it works</a>
+    <!-- Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
-    <div class="scroll-hint">Scroll to explore</div>
-  </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how">
-    <div class="section-label">Process</div>
-    <h2>Three steps to<br>your <em>perfect song</em></h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">01 / Send</div>
-        <h3>Your Lyrics or Idea</h3>
-        <p>Write your own lyrics or simply describe what you want — love song, birthday dedication, a feeling. We handle the rest.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02 / Choose</div>
-        <h3>Style & Voice</h3>
-        <p>Pick your music style — Pop, Jazz, Classical, Hip-Hop — and select the vocal tone that fits your vision.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03 / Receive</div>
-        <h3>Your Song</h3>
-        <p>Within minutes, a fully produced AI song arrives in your WhatsApp — ready to stream, share, or download.</p>
-      </div>
-    </div>
-  </section>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <img src="/assets/logo.png" alt="MistiqueAI" class="nav-logo">
+                <div class="nav-brand-text">MISTIQUE <span>AI</span></div>
+            </a>
+            <a href="https://wa.me/15186552535" class="nav-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>WhatsApp</span>
+            </a>
+        </div>
+    </nav>
 
-  <div class="divider"></div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <img src="/assets/logo.png" alt="MistiqueAI Logo" class="hero-logo">
+            <h1 class="hero-title">MISTIQUE <span>AI</span></h1>
+            <p class="hero-tagline">Whisper it. We'll sing it.</p>
+            <p class="hero-sub">AI-powered song generator on WhatsApp</p>
+            <a href="https://wa.me/15186552535" class="btn-primary" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Create Your Song
+            </a>
+        </div>
+    </section>
 
-  <!-- FEATURES -->
-  <section class="section">
-    <div class="section-label">Features</div>
-    <h2>Built for <em>everyone</em></h2>
-    <div class="features-grid">
-      <div class="feature">
-        <div class="feature-icon">🎵</div>
-        <h3>Any Language</h3>
-        <p>Generate songs in Azerbaijani, English, Turkish, Russian — or any language you write in. Our AI understands your words.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">🎸</div>
-        <h3>Any Style</h3>
-        <p>Pop, meyxana, jazz, hip-hop, classical, electronic — from traditional Azerbaijani to global genres, we cover it all.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">📱</div>
-        <h3>Just WhatsApp</h3>
-        <p>No app to download, no account to create. If you have WhatsApp, you have everything you need to create music.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">⚡</div>
-        <h3>Ready in Minutes</h3>
-        <p>From your first message to a finished song in under 3 minutes. AI-powered generation delivers studio-quality results fast.</p>
-      </div>
-    </div>
-  </section>
+    <!-- How It Works -->
+    <section id="how-it-works">
+        <div class="container">
+            <h2 class="section-title fade-in">How It <span>Works</span></h2>
+            <div class="steps">
+                <div class="step-card fade-in">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 36V12a4 4 0 014-4h28a4 4 0 014 4v16a4 4 0 01-4 4H14l-8 8V36z"/>
+                            <circle cx="16" cy="20" r="1.5" fill="currentColor" stroke="none"/>
+                            <circle cx="24" cy="20" r="1.5" fill="currentColor" stroke="none"/>
+                            <circle cx="32" cy="20" r="1.5" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </div>
+                    <h3>Text Us</h3>
+                    <p>Send a message on WhatsApp to start creating your song.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="30" cy="34" r="6"/>
+                            <path d="M36 34V8"/>
+                            <path d="M36 8c-4 2-8 2-12 0"/>
+                            <circle cx="18" cy="28" r="6"/>
+                            <path d="M24 28V6"/>
+                            <path d="M24 6c-4 2-8 2-12 0"/>
+                        </svg>
+                    </div>
+                    <h3>Describe Your Song</h3>
+                    <p>Tell us the mood, style, and story you want your song to capture.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10 20a14 14 0 0128 0"/>
+                            <path d="M6 20v8a4 4 0 004 4h2V16H10a4 4 0 00-4 4z"/>
+                            <path d="M42 20v8a4 4 0 01-4 4h-2V16h2a4 4 0 014 4z"/>
+                            <path d="M12 32v4a8 8 0 008 8h4"/>
+                        </svg>
+                    </div>
+                    <h3>Get Your Song</h3>
+                    <p>Receive your AI-generated song in minutes, ready to share and enjoy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- DEMO -->
-  <section class="demo-section" id="demo">
-    <div>
-      <div class="section-label">Live Demo</div>
-      <h2>See it in <em>action</em></h2>
-      <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">A real conversation with SunoBot. Just text, choose, and receive your song.</p>
-      <a href="https://wa.me/15186552535" class="btn-primary">Try it now →</a>
-    </div>
-    <div class="phone-mockup">
-      <div class="phone-header">
-        <div class="phone-dot"></div>
-        SunoBot · +1 518 655 2535
-      </div>
-      <div class="msg bot">
-        <div class="msg-bubble">🎵 Welcome to SunoBot! Do you have your lyrics ready?<br><br>1️⃣ Yes — I have lyrics ready<br>2️⃣ No — Help me generate</div>
-        <div class="msg-time">9:41 PM</div>
-      </div>
-      <div class="msg user">
-        <div class="msg-bubble">2</div>
-        <div class="msg-time">9:41 PM ✓✓</div>
-      </div>
-      <div class="msg bot">
-        <div class="msg-bubble">🎭 Describe what you want the song to be about in 5-10 sentences...</div>
-        <div class="msg-time">9:41 PM</div>
-      </div>
-      <div class="msg user">
-        <div class="msg-bubble">A birthday song for my daughter turning 15. She wants to be a doctor...</div>
-        <div class="msg-time">9:42 PM ✓✓</div>
-      </div>
-      <div class="msg bot">
-        <div class="msg-bubble">✅ Here are your generated lyrics:<br><br>[Verse 1]<br>Qızımın ad günüdür, on beş yaşı olur<br>Ona şirindil deyirəm...</div>
-        <div class="msg-time">9:42 PM</div>
-      </div>
-      <div class="msg bot">
-        <div class="msg-bubble">🎵 Your song is ready!<br><br>🎧 Listen: cdn.suno.ai/song_abc123.mp3</div>
-        <div class="msg-time">9:45 PM</div>
-      </div>
-    </div>
-  </section>
+    <!-- Features -->
+    <section id="features">
+        <div class="container">
+            <h2 class="section-title fade-in">What Makes Us <span>Special</span></h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="18" r="15"/>
+                            <ellipse cx="18" cy="18" rx="6" ry="15"/>
+                            <path d="M3 18h30"/>
+                            <path d="M5 10h26"/>
+                            <path d="M5 26h26"/>
+                        </svg>
+                    </div>
+                    <h3>4 Languages</h3>
+                    <p>Create songs in Azerbaijani, Turkish, English, and Russian. Express yourself in the language that feels like home.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 4L8 28"/>
+                            <path d="M4 18h20"/>
+                            <path d="M24 16l4 12 4-12"/>
+                            <path d="M22 28h12"/>
+                        </svg>
+                    </div>
+                    <h3>AI Lyrics</h3>
+                    <p>Our AI writes original lyrics from your description, crafting words that tell your unique story.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="18,2 22,13 34,13 24.5,20 28,31 18,24 8,31 11.5,20 2,13 14,13"/>
+                        </svg>
+                    </div>
+                    <h3>"Inspired By" Mode</h3>
+                    <p>Create songs inspired by your favorite artists. Reference a style, and we match the vibe.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="14" cy="26" r="5"/>
+                            <path d="M19 26V6"/>
+                            <path d="M19 6h10v6H19"/>
+                            <circle cx="26" cy="20" r="4"/>
+                            <path d="M30 20V8"/>
+                        </svg>
+                    </div>
+                    <h3>Multiple Styles &amp; Voices</h3>
+                    <p>Pop, Rock, Jazz, R&amp;B and more. Choose from a wide range of genres and vocal styles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="logo" style="font-size: 1rem;">Mistique <span>AI</span></div>
-    <p>© 2026 Mistique AI · <a href="mailto:contact@mistiqueai.com">contact@mistiqueai.com</a> · WhatsApp: +1 518 655 2535</p>
-    <p style="color: var(--text-muted);">AI Music Generation Platform</p>
-  </footer>
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container fade-in">
+            <h2>Ready to Create Your <span style="color: var(--gold);">Song</span>?</h2>
+            <div class="cta-buttons">
+                <a href="https://wa.me/15186552535" class="btn-primary" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Create Your Song
+                </a>
+                <a href="https://youtube.com/@MistiqueAI" class="btn-secondary" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    Watch on YouTube
+                </a>
+            </div>
+        </div>
+    </section>
 
-  <script>
-    // Custom cursor
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <img src="/assets/watermark.png" alt="MistiqueAI" class="footer-watermark">
+            <p class="footer-copy">&copy; 2025 MistiqueAI. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://wa.me/15186552535" target="_blank" rel="noopener">WhatsApp</a>
+                <a href="https://youtube.com/@MistiqueAI" target="_blank" rel="noopener">YouTube</a>
+            </div>
+        </div>
+    </footer>
 
-    document.addEventListener('mousemove', e => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      cursor.style.left = mouseX - 4 + 'px';
-      cursor.style.top = mouseY - 4 + 'px';
-    });
+    <script>
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            },
+            {
+                threshold: 0.15,
+                rootMargin: '0px 0px -40px 0px'
+            }
+        );
 
-    function animateRing() {
-      ringX += (mouseX - ringX - 16) * 0.12;
-      ringY += (mouseY - ringY - 16) * 0.12;
-      ring.style.left = ringX + 'px';
-      ring.style.top = ringY + 'px';
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
-
-    // Hover effects
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(2)';
-        ring.style.transform = 'scale(1.5)';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        ring.style.transform = 'scale(1)';
-      });
-    });
-
-    // Fade in on scroll
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.step, .feature, .pricing-card').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(30px)';
-      el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
-      observer.observe(el);
-    });
-  </script>
+        document.querySelectorAll('.fade-in').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>

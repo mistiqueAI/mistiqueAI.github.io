@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="MistiqueAI Song">
+<meta property="og:description" content="Listen to this AI-generated song on MistiqueAI">
+<meta property="og:image" content="/assets/og-card.png">
+<meta property="og:type" content="music.song">
+<title>MistiqueAI</title>
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold: #D4AF37;
+  --gold-light: #E8C94A;
+  --gold-dark: #B8960F;
+  --bg: #0a0a0a;
+  --bg-card: #111111;
+  --bg-elevated: #1a1a1a;
+  --text: #ffffff;
+  --text-dim: #888888;
+  --whatsapp: #25D366;
+  --facebook: #1877F2;
+  --twitter: #1DA1F2;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px;
+  padding: 24px 20px 40px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.header a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+.header-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  object-fit: cover;
+}
+.header-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--gold);
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 80px 20px;
+}
+.error-state h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.error-state p {
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+.error-state a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid var(--gold-dark);
+  padding-bottom: 2px;
+}
+
+/* Record Player */
+.player-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+  position: relative;
+}
+.record-player {
+  position: relative;
+  width: 280px;
+  height: 280px;
+}
+.vinyl {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #1a1a1a 0%,
+    #1a1a1a 15%,
+    var(--gold-dark) 15.3%,
+    var(--gold) 16%,
+    var(--gold-dark) 16.7%,
+    #1a1a1a 17%,
+    #111 20%,
+    #0d0d0d 22%,
+    #111 24%,
+    #0d0d0d 26%,
+    #111 28%,
+    #0d0d0d 30%,
+    #111 32%,
+    #0d0d0d 34%,
+    #111 36%,
+    #0d0d0d 38%,
+    #111 40%,
+    #0d0d0d 42%,
+    #111 44%,
+    #0d0d0d 46%,
+    #111 48%,
+    #0d0d0d 50%,
+    #111 52%,
+    #0d0d0d 54%,
+    #111 56%,
+    #0d0d0d 58%,
+    #111 60%,
+    #0d0d0d 62%,
+    #111 64%,
+    #0d0d0d 66%,
+    #111 68%,
+    #0d0d0d 70%,
+    #111 72%,
+    #0d0d0d 74%,
+    #111 76%,
+    #0d0d0d 78%,
+    #111 80%,
+    #0d0d0d 82%,
+    #111 84%,
+    #0d0d0d 86%,
+    #111 88%,
+    #0d0d0d 90%,
+    #111 92%,
+    #0d0d0d 94%,
+    #111 96%,
+    #0a0a0a 98%,
+    #0a0a0a 100%
+  );
+  border: 3px solid #222;
+  box-shadow:
+    0 0 0 4px #0d0d0d,
+    0 0 40px rgba(0,0,0,0.6),
+    inset 0 0 60px rgba(0,0,0,0.3);
+  position: relative;
+  animation: spin 3s linear infinite;
+  animation-play-state: paused;
+}
+.vinyl.playing {
+  animation-play-state: running;
+}
+.vinyl::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #222 0%, #111 40%, var(--gold-dark) 42%, var(--gold) 50%, var(--gold-dark) 58%, #111 60%, #111 100%);
+  box-shadow: 0 0 15px rgba(212,175,55,0.3);
+  z-index: 2;
+}
+.vinyl::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #333;
+  border: 1px solid #444;
+  z-index: 3;
+}
+.vinyl-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+}
+.vinyl-label span {
+  font-size: 7px;
+  font-weight: 600;
+  color: var(--gold);
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  max-width: 50px;
+  line-height: 1.2;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Vinyl shimmer/reflection */
+.vinyl-reflection {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255,255,255,0.02) 45%,
+    rgba(255,255,255,0.05) 50%,
+    rgba(255,255,255,0.02) 55%,
+    transparent 60%,
+    transparent 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Tonearm */
+.tonearm {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+  transform-origin: 85px 15px;
+  transform: rotate(-25deg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tonearm.playing {
+  transform: rotate(0deg);
+}
+.tonearm-base {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #555, #333);
+  border: 2px solid #444;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.tonearm-arm {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #666, #999, #666);
+  border-radius: 1px;
+  transform-origin: right center;
+  transform: rotate(35deg);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.tonearm-head {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 86px;
+  height: 3px;
+  transform-origin: right center;
+  transform: rotate(35deg);
+}
+.tonearm-head::after {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: -3px;
+  width: 12px;
+  height: 9px;
+  background: linear-gradient(180deg, #888, #555);
+  border-radius: 2px 2px 1px 1px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.tonearm-head::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 0px;
+  width: 3px;
+  height: 6px;
+  background: var(--gold);
+  border-radius: 0 0 1px 1px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Song Info */
+.song-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.song-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.song-style {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Visualizer */
+.visualizer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  height: 40px;
+  margin-bottom: 24px;
+}
+.viz-bar {
+  width: 6px;
+  min-height: 3px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: height 0.1s ease;
+}
+.viz-bar.active {
+  animation: vizBounce var(--dur) ease-in-out infinite alternate;
+  animation-delay: var(--delay);
+  box-shadow: 0 0 6px rgba(212,175,55,0.3);
+}
+
+@keyframes vizBounce {
+  0% { height: 4px; }
+  100% { height: var(--max-h); }
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.play-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(212,175,55,0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.play-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 25px rgba(212,175,55,0.5);
+}
+.play-btn:active { transform: scale(0.97); }
+.play-btn svg { fill: #0a0a0a; }
+
+.progress-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #222;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.1s linear;
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(212,175,55,0.5);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.progress-bar:hover .progress-fill::after { opacity: 1; }
+.time-display {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.download-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  background: var(--bg-elevated);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.download-btn:hover {
+  border-color: var(--gold);
+  background: #222;
+}
+.download-btn svg { stroke: var(--text-dim); transition: stroke 0.2s; }
+.download-btn:hover svg { stroke: var(--gold); }
+
+/* Created Badge */
+.created-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--gold-dark);
+  border-radius: 24px;
+  padding: 8px 18px;
+  margin: 28px auto;
+  width: fit-content;
+}
+.created-badge img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+.created-badge span {
+  font-size: 12px;
+  color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Share */
+.share-section {
+  margin-top: 32px;
+  text-align: center;
+}
+.share-section h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.share-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 1px solid #222;
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, transform 0.15s, background 0.2s;
+  position: relative;
+}
+.share-btn svg { width: 22px; height: 22px; fill: #999; transition: fill 0.2s; }
+.share-btn:hover { transform: translateY(-2px); }
+.share-btn.whatsapp:hover { border-color: var(--whatsapp); background: rgba(37,211,102,0.08); }
+.share-btn.whatsapp:hover svg { fill: var(--whatsapp); }
+.share-btn.facebook:hover { border-color: var(--facebook); background: rgba(24,119,242,0.08); }
+.share-btn.facebook:hover svg { fill: var(--facebook); }
+.share-btn.twitter:hover { border-color: var(--twitter); background: rgba(29,161,242,0.08); }
+.share-btn.twitter:hover svg { fill: var(--twitter); }
+.share-btn.copy:hover { border-color: var(--gold); background: rgba(212,175,55,0.08); }
+.share-btn.copy:hover svg { fill: var(--gold); }
+
+.tooltip {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: #0a0a0a;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.tooltip.show { opacity: 1; }
+
+/* CTA */
+.cta-section {
+  margin-top: 32px;
+  text-align: center;
+}
+.cta-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  color: #0a0a0a;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 36px;
+  border-radius: 30px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 20px rgba(212,175,55,0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(212,175,55,0.45);
+}
+
+/* Footer */
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid #1a1a1a;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.footer a { color: var(--gold); text-decoration: none; }
+
+/* Loading/Error overlay on player */
+.player-msg {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-top: -8px;
+  margin-bottom: 16px;
+  display: none;
+}
+.player-msg.visible { display: block; }
+.player-msg.error { color: #e74c3c; }
+
+/* Mobile tweaks */
+@media (max-width: 400px) {
+  .record-player, .vinyl { width: 240px; height: 240px; }
+  .vinyl::before { width: 68px; height: 68px; }
+  .vinyl-label { width: 64px; height: 64px; }
+  .vinyl-label span { font-size: 6px; max-width: 42px; }
+  .song-title { font-size: 20px; }
+  .share-btn { width: 48px; height: 48px; border-radius: 12px; }
+  .share-btn svg { width: 18px; height: 18px; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <!-- Header -->
+  <div class="header">
+    <a href="/">
+      <img src="/assets/logo.png" alt="MistiqueAI" class="header-logo">
+      <span class="header-text">MISTIQUE AI</span>
+    </a>
+  </div>
+
+  <!-- Error state (hidden by default) -->
+  <div class="error-state" id="errorState" style="display:none;">
+    <h2>Song Not Found</h2>
+    <p>This song link appears to be invalid or has expired.</p>
+    <a href="/">Go to MistiqueAI Home</a>
+  </div>
+
+  <!-- Main content (hidden until validated) -->
+  <div id="mainContent" style="display:none;">
+
+    <!-- Vinyl Record Player -->
+    <div class="player-wrapper">
+      <div class="record-player">
+        <div class="vinyl" id="vinyl">
+          <div class="vinyl-reflection"></div>
+          <div class="vinyl-label"><span id="vinylTitle"></span></div>
+        </div>
+        <div class="tonearm" id="tonearm">
+          <div class="tonearm-base"></div>
+          <div class="tonearm-arm"></div>
+          <div class="tonearm-head"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Song Info -->
+    <div class="song-info">
+      <h1 class="song-title" id="songTitle"></h1>
+      <span class="song-style" id="songStyle"></span>
+    </div>
+
+    <!-- Player message (loading/error) -->
+    <div class="player-msg" id="playerMsg"></div>
+
+    <!-- Visualizer -->
+    <div class="visualizer" id="visualizer"></div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="play-btn" id="playBtn" aria-label="Play">
+        <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
+        <svg id="pauseIcon" width="22" height="22" viewBox="0 0 24 24" style="display:none;"><rect x="5" y="3" width="5" height="18" rx="1"/><rect x="14" y="3" width="5" height="18" rx="1"/></svg>
+      </button>
+      <div class="progress-wrapper">
+        <div class="progress-bar" id="progressBar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="time-display">
+          <span id="currentTime">0:00</span>
+          <span id="totalTime">0:00</span>
+        </div>
+      </div>
+      <button class="download-btn" id="downloadBtn" aria-label="Download">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Created Badge -->
+    <div class="created-badge">
+      <img src="/assets/watermark.png" alt="">
+      <span>Created with MistiqueAI</span>
+    </div>
+
+    <!-- Share Section -->
+    <div class="share-section">
+      <h3>Share this song</h3>
+      <div class="share-buttons">
+        <button class="share-btn whatsapp" id="shareWhatsapp" aria-label="Share on WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </button>
+        <button class="share-btn facebook" id="shareFacebook" aria-label="Share on Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </button>
+        <button class="share-btn twitter" id="shareTwitter" aria-label="Share on X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </button>
+        <button class="share-btn copy" id="shareCopy" aria-label="Copy link">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          <div class="tooltip" id="copyTooltip">Copied!</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <a href="https://wa.me/15186552535" target="_blank" rel="noopener" class="cta-btn">Create Your Own Song</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      &copy; 2025 MistiqueAI &middot; <a href="/">Home</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Parse URL params
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const title = params.get('title') || 'Untitled';
+  const style = params.get('style') || 'AI Generated';
+
+  const errorState = document.getElementById('errorState');
+  const mainContent = document.getElementById('mainContent');
+
+  if (!id) {
+    errorState.style.display = 'block';
+    return;
+  }
+
+  mainContent.style.display = 'block';
+
+  // Set text content
+  document.title = title + ' \u2014 MistiqueAI';
+  document.getElementById('songTitle').textContent = title;
+  document.getElementById('vinylTitle').textContent = title;
+  document.getElementById('songStyle').textContent = style;
+
+  // OG tags
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', title + ' \u2014 MistiqueAI');
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.setAttribute('content', 'Listen to "' + title + '" \u2014 Created with MistiqueAI');
+
+  // Audio
+  const audioSrc = 'https://cdn1.suno.ai/' + encodeURIComponent(id) + '.mp3';
+  const audio = new Audio();
+  audio.preload = 'metadata';
+  audio.src = audioSrc;
+  audio.crossOrigin = 'anonymous';
+
+  let isPlaying = false;
+
+  const vinyl = document.getElementById('vinyl');
+  const tonearm = document.getElementById('tonearm');
+  const playBtn = document.getElementById('playBtn');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl = document.getElementById('totalTime');
+  const playerMsg = document.getElementById('playerMsg');
+
+  // Build visualizer bars
+  const visualizer = document.getElementById('visualizer');
+  const barCount = 20;
+  const bars = [];
+  for (let i = 0; i < barCount; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'viz-bar';
+    bar.style.setProperty('--delay', (Math.random() * 0.5).toFixed(2) + 's');
+    bar.style.setProperty('--dur', (0.3 + Math.random() * 0.5).toFixed(2) + 's');
+    bar.style.setProperty('--max-h', (12 + Math.random() * 26).toFixed(0) + 'px');
+    visualizer.appendChild(bar);
+    bars.push(bar);
+  }
+
+  function setPlaying(playing) {
+    isPlaying = playing;
+    if (playing) {
+      vinyl.classList.add('playing');
+      tonearm.classList.add('playing');
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+      bars.forEach(b => b.classList.add('active'));
+    } else {
+      vinyl.classList.remove('playing');
+      tonearm.classList.remove('playing');
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      bars.forEach(b => b.classList.remove('active'));
+    }
+  }
+
+  function formatTime(s) {
+    if (!isFinite(s) || s < 0) return '0:00';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  playBtn.addEventListener('click', function() {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(function() {});
+    }
+  });
+
+  audio.addEventListener('play', function() { setPlaying(true); });
+  audio.addEventListener('pause', function() { setPlaying(false); });
+  audio.addEventListener('ended', function() { setPlaying(false); });
+
+  audio.addEventListener('loadedmetadata', function() {
+    totalTimeEl.textContent = formatTime(audio.duration);
+    playerMsg.classList.remove('visible');
+  });
+
+  audio.addEventListener('timeupdate', function() {
+    if (audio.duration) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = pct + '%';
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    }
+  });
+
+  audio.addEventListener('waiting', function() {
+    playerMsg.textContent = 'Loading audio...';
+    playerMsg.className = 'player-msg visible';
+  });
+
+  audio.addEventListener('canplay', function() {
+    playerMsg.classList.remove('visible');
+  });
+
+  audio.addEventListener('error', function() {
+    playerMsg.textContent = 'Could not load song. The file may be unavailable.';
+    playerMsg.className = 'player-msg visible error';
+    playBtn.disabled = true;
+    playBtn.style.opacity = '0.4';
+    playBtn.style.cursor = 'not-allowed';
+  });
+
+  // Progress bar seeking
+  progressBar.addEventListener('click', function(e) {
+    if (!audio.duration) return;
+    const rect = progressBar.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+  });
+
+  // Download
+  document.getElementById('downloadBtn').addEventListener('click', function() {
+    const a = document.createElement('a');
+    a.href = audioSrc;
+    a.download = title + '.mp3';
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+
+  // Share
+  const pageUrl = window.location.href;
+  const shareText = title + ' \u2014 Created with MistiqueAI \ud83c\udfb5\nListen: ' + pageUrl + '\nCreate your own: https://wa.me/15186552535';
+
+  document.getElementById('shareWhatsapp').addEventListener('click', function() {
+    window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank');
+  });
+
+  document.getElementById('shareFacebook').addEventListener('click', function() {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl), '_blank');
+  });
+
+  document.getElementById('shareTwitter').addEventListener('click', function() {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText), '_blank');
+  });
+
+  document.getElementById('shareCopy').addEventListener('click', function() {
+    navigator.clipboard.writeText(pageUrl).then(function() {
+      const tip = document.getElementById('copyTooltip');
+      tip.classList.add('show');
+      setTimeout(function() { tip.classList.remove('show'); }, 1500);
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
