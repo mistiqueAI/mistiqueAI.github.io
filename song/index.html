@@ -494,6 +494,58 @@ body {
 .download-btn svg { stroke: var(--text-dim); transition: stroke 0.2s; }
 .download-btn:hover svg { stroke: var(--gold); }
 
+/* Save Section */
+.save-section {
+  text-align: center;
+  margin: 20px 0 8px;
+}
+.save-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.save-status {
+  font-size: 12px;
+  color: var(--gold);
+  min-height: 18px;
+}
+.save-help-toggle {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  transition: color 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.save-help-toggle:hover { color: var(--gold); }
+.save-help {
+  display: none;
+  margin-top: 8px;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid #222;
+  border-radius: 10px;
+  text-align: left;
+}
+.save-help.open { display: block; }
+.save-help-item {
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 4px 0;
+  line-height: 1.4;
+}
+.save-help-item::before {
+  content: '•';
+  color: var(--gold);
+  margin-right: 8px;
+}
+
 /* Created Badge */
 .created-badge {
   display: flex;
@@ -723,22 +775,37 @@ body {
       </button>
     </div>
 
+    <!-- Download/Save Section -->
+    <div class="save-section" id="saveSection">
+      <div class="save-label" id="saveLabel">Save to device</div>
+      <div class="save-status" id="saveStatus"></div>
+      <button class="save-help-toggle" id="saveHelpToggle">
+        <span id="saveHelpText">How to save</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="save-help" id="saveHelp">
+        <div class="save-help-item" id="saveHelpIphone">iPhone: Save to Files</div>
+        <div class="save-help-item" id="saveHelpAndroid">Android: Downloads automatically</div>
+        <div class="save-help-item" id="saveHelpDesktop">Desktop: MP3 downloads</div>
+      </div>
+    </div>
+
     <!-- Created Badge -->
     <div class="created-badge">
       <img src="/assets/watermark.png" alt="">
-      <span>Created with MistiqueAI</span>
+      <span id="createdBadgeText">Created with MistiqueAI</span>
     </div>
 
     <!-- Share Section -->
     <div class="share-section">
-      <h3>Share this song</h3>
+      <h3 id="shareHeading">Share this song</h3>
       <div class="share-buttons">
         <button class="share-btn whatsapp" id="shareWhatsapp" aria-label="Share on WhatsApp">
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </button>
         <button class="share-btn instagram" id="shareInstagram" aria-label="Share on Instagram">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          <div class="tooltip wide" id="instaTooltip">Link copied! Paste it in your Instagram bio or story</div>
+          <div class="tooltip wide" id="instaTooltip"></div>
         </button>
         <button class="share-btn facebook" id="shareFacebook" aria-label="Share on Facebook">
           <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -751,33 +818,133 @@ body {
         </button>
         <button class="share-btn copy" id="shareCopy" aria-label="Copy link">
           <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-          <div class="tooltip" id="copyTooltip">Copied!</div>
+          <div class="tooltip" id="copyTooltip"></div>
         </button>
       </div>
     </div>
 
     <!-- CTA -->
     <div class="cta-section">
-      <a href="https://wa.me/15186552535" target="_blank" rel="noopener" class="cta-btn">Create Your Own Song</a>
+      <a href="https://wa.me/15186552535" target="_blank" rel="noopener" class="cta-btn" id="ctaBtn">Create Your Own Song</a>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-      Powered by <a href="/">MistiqueAI</a> &middot; &copy; 2025 MistiqueAI
+      <span id="footerPowered">Powered by</span> <a href="/">MistiqueAI</a> &middot; &copy; 2025 MistiqueAI
     </div>
   </div>
 </div>
 
 <script>
 (function() {
-  // Parse URL params
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  const title = params.get('title') || 'Untitled';
-  const style = params.get('style') || 'AI Generated';
+  // ========== TRANSLATIONS ==========
+  var i18n = {
+    en: {
+      createdWith: 'Created with MistiqueAI',
+      shareHeading: 'Share this song',
+      saveLabel: 'Save to device',
+      saveHelpText: 'How to save',
+      saveHelpIphone: 'iPhone: Save to Files',
+      saveHelpAndroid: 'Android: Downloads automatically',
+      saveHelpDesktop: 'Desktop: MP3 downloads',
+      saving: 'Downloading...',
+      saved: 'Saved!',
+      createOwn: 'Create Your Own Song',
+      poweredBy: 'Powered by',
+      instaTooltip: 'Link copied! Paste it in your Instagram bio or story',
+      copyTooltip: 'Copied!',
+      songNotFound: 'Song Not Found',
+      songNotFoundDesc: 'This song link appears to be invalid or has expired.',
+      goHome: 'Go to MistiqueAI Home',
+      loadingAudio: 'Loading audio...',
+      audioError: 'Could not load song. The file may be unavailable.',
+      ogDesc: 'Created with MistiqueAI \u2014 Whisper it. We\'ll sing it.',
+      telegramShare: function(t) { return t + ' \u2014 Created with MistiqueAI \ud83c\udfb5 Make yours \u2192 https://wa.me/15186552535'; }
+    },
+    az: {
+      createdWith: 'Yarad\u0131l\u0131b MistiqueAI il\u0259',
+      shareHeading: 'Bu mahn\u0131n\u0131 payla\u015f',
+      saveLabel: 'Cihaz\u0131na saxla',
+      saveHelpText: 'Nec\u0259 saxlamaq olar',
+      saveHelpIphone: 'iPhone-da: Fayla saxla',
+      saveHelpAndroid: 'Android-d\u0259: Avtomatik y\u00fckl\u0259nir',
+      saveHelpDesktop: 'Komp\u00fcterd\u0259: MP3 y\u00fckl\u0259nir',
+      saving: 'Y\u00fckl\u0259nir...',
+      saved: 'Saxlan\u0131ld\u0131!',
+      createOwn: '\u00d6z mahn\u0131n\u0131 yarat',
+      poweredBy: 'MistiqueAI il\u0259 i\u015fl\u0259yir',
+      instaTooltip: 'Link kopyaland\u0131! Instagram bio v\u0259 ya story-y\u0259 yap\u0131\u015fd\u0131r\u0131n',
+      copyTooltip: 'Kopyaland\u0131!',
+      songNotFound: 'Mahn\u0131 tap\u0131lmad\u0131',
+      songNotFoundDesc: 'Bu mahn\u0131 linki etibars\u0131z v\u0259 ya m\u00fcidd\u0259ti bitmi\u015f g\u00f6r\u00fcn\u00fcr.',
+      goHome: 'MistiqueAI Ana S\u0259hif\u0259',
+      loadingAudio: 'Audio y\u00fckl\u0259nir...',
+      audioError: 'Mahn\u0131 y\u00fckl\u0259n\u0259 bilm\u0259di. Fayl m\u00f6vcud olmaya bil\u0259r.',
+      ogDesc: 'Yarad\u0131l\u0131b MistiqueAI il\u0259 \u2014 P\u0131\u015f\u0131lda. Biz oxuyaq.',
+      telegramShare: function(t) { return t + ' \u2014 Yarad\u0131l\u0131b MistiqueAI il\u0259 \ud83c\udfb5 S\u0259ninkin\u0131 yarat \u2192 wa.me/15186552535'; }
+    },
+    tr: {
+      createdWith: 'MistiqueAI ile olu\u015fturuldu',
+      shareHeading: 'Bu \u015fark\u0131y\u0131 payla\u015f',
+      saveLabel: 'Cihaz\u0131na kaydet',
+      saveHelpText: 'Nas\u0131l kaydedilir',
+      saveHelpIphone: 'iPhone: Dosyalara kaydet',
+      saveHelpAndroid: 'Android: Otomatik indirilir',
+      saveHelpDesktop: 'Bilgisayar: MP3 indirilir',
+      saving: '\u0130ndiriliyor...',
+      saved: 'Kaydedildi!',
+      createOwn: 'Kendi \u015fark\u0131n\u0131 olu\u015ftur',
+      poweredBy: 'MistiqueAI ile \u00e7al\u0131\u015f\u0131r',
+      instaTooltip: 'Link kopyaland\u0131! Instagram bio veya story\'nize yap\u0131\u015ft\u0131r\u0131n',
+      copyTooltip: 'Kopyaland\u0131!',
+      songNotFound: '\u015eark\u0131 bulunamad\u0131',
+      songNotFoundDesc: 'Bu \u015fark\u0131 linki ge\u00e7ersiz veya s\u00fcresi dolmu\u015f g\u00f6r\u00fcn\u00fcyor.',
+      goHome: 'MistiqueAI Ana Sayfa',
+      loadingAudio: 'Ses y\u00fckleniyor...',
+      audioError: '\u015eark\u0131 y\u00fcklenemedi. Dosya mevcut olmayabilir.',
+      ogDesc: 'MistiqueAI ile olu\u015fturuldu \u2014 F\u0131s\u0131lda. Biz s\u00f6yleyelim.',
+      telegramShare: function(t) { return t + ' \u2014 MistiqueAI ile olu\u015fturuldu \ud83c\udfb5 Kendininkini yarat \u2192 wa.me/15186552535'; }
+    },
+    ru: {
+      createdWith: '\u0421\u043e\u0437\u0434\u0430\u043d\u043e \u0441 MistiqueAI',
+      shareHeading: '\u041f\u043e\u0434\u0435\u043b\u0438\u0442\u044c\u0441\u044f \u043f\u0435\u0441\u043d\u0435\u0439',
+      saveLabel: '\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043d\u0430 \u0443\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u043e',
+      saveHelpText: '\u041a\u0430\u043a \u0441\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c',
+      saveHelpIphone: '\u041d\u0430 iPhone: \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0432 \u0424\u0430\u0439\u043b\u044b',
+      saveHelpAndroid: '\u041d\u0430 Android: \u0421\u043a\u0430\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438',
+      saveHelpDesktop: '\u041d\u0430 \u043a\u043e\u043c\u043f\u044c\u044e\u0442\u0435\u0440\u0435: MP3 \u0441\u043a\u0430\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f',
+      saving: '\u0421\u043a\u0430\u0447\u0438\u0432\u0430\u043d\u0438\u0435...',
+      saved: '\u0421\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u043e!',
+      createOwn: '\u0421\u043e\u0437\u0434\u0430\u0439 \u0441\u0432\u043e\u044e \u043f\u0435\u0441\u043d\u044e',
+      poweredBy: '\u0420\u0430\u0431\u043e\u0442\u0430\u0435\u0442 \u043d\u0430 MistiqueAI',
+      instaTooltip: '\u0421\u0441\u044b\u043b\u043a\u0430 \u0441\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u0430! \u0412\u0441\u0442\u0430\u0432\u044c\u0442\u0435 \u0432 Instagram \u0431\u0438\u043e \u0438\u043b\u0438 \u0441\u0442\u043e\u0440\u0438\u0441',
+      copyTooltip: '\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e!',
+      songNotFound: '\u041f\u0435\u0441\u043d\u044f \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u0430',
+      songNotFoundDesc: '\u042d\u0442\u0430 \u0441\u0441\u044b\u043b\u043a\u0430 \u043d\u0435\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u0430 \u0438\u043b\u0438 \u0441\u0440\u043e\u043a \u0435\u0451 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f \u0438\u0441\u0442\u0451\u043a.',
+      goHome: '\u041d\u0430 \u0433\u043b\u0430\u0432\u043d\u0443\u044e MistiqueAI',
+      loadingAudio: '\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430 \u0430\u0443\u0434\u0438\u043e...',
+      audioError: '\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u043f\u0435\u0441\u043d\u044e. \u0424\u0430\u0439\u043b \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u0435\u043d.',
+      ogDesc: '\u0421\u043e\u0437\u0434\u0430\u043d\u043e \u0441 MistiqueAI \u2014 \u041f\u0440\u043e\u0448\u0435\u043f\u0447\u0438. \u041c\u044b \u0441\u043f\u043e\u0451\u043c.',
+      telegramShare: function(t) { return t + ' \u2014 \u0421\u043e\u0437\u0434\u0430\u043d\u043e \u0441 MistiqueAI \ud83c\udfb5 \u0421\u043e\u0437\u0434\u0430\u0439 \u0441\u0432\u043e\u044e \u2192 wa.me/15186552535'; }
+    }
+  };
 
-  const errorState = document.getElementById('errorState');
-  const mainContent = document.getElementById('mainContent');
+  // Parse URL params
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get('id');
+  var title = params.get('title') || 'Untitled';
+  var style = params.get('style') || 'AI Generated';
+  var lang = (params.get('lang') || 'en').toLowerCase();
+  if (!i18n[lang]) lang = 'en';
+  var t = i18n[lang];
+
+  var errorState = document.getElementById('errorState');
+  var mainContent = document.getElementById('mainContent');
+
+  // Apply translations to error state
+  errorState.querySelector('h2').textContent = t.songNotFound;
+  errorState.querySelector('p').textContent = t.songNotFoundDesc;
+  errorState.querySelector('a').textContent = t.goHome;
 
   if (!id) {
     errorState.style.display = 'block';
@@ -786,44 +953,66 @@ body {
 
   mainContent.style.display = 'block';
 
+  // Apply translations to all UI elements
+  document.getElementById('createdBadgeText').textContent = t.createdWith;
+  document.getElementById('shareHeading').textContent = t.shareHeading;
+  document.getElementById('saveLabel').textContent = t.saveLabel;
+  document.getElementById('saveHelpText').textContent = t.saveHelpText;
+  document.getElementById('saveHelpIphone').textContent = t.saveHelpIphone;
+  document.getElementById('saveHelpAndroid').textContent = t.saveHelpAndroid;
+  document.getElementById('saveHelpDesktop').textContent = t.saveHelpDesktop;
+  document.getElementById('ctaBtn').textContent = t.createOwn;
+  document.getElementById('footerPowered').textContent = t.poweredBy;
+  document.getElementById('instaTooltip').textContent = t.instaTooltip;
+  document.getElementById('copyTooltip').textContent = t.copyTooltip;
+
   // Set text content
-  document.title = title + ' \u2014 Created with MistiqueAI';
+  document.title = title + ' \u2014 ' + t.createdWith;
   document.getElementById('songTitle').textContent = title;
   document.getElementById('vinylTitle').textContent = title;
   document.getElementById('songStyle').textContent = style;
 
   // OG tags
-  const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', title + ' \u2014 Created with MistiqueAI');
-  const ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.setAttribute('content', 'Created with MistiqueAI \u2014 Whisper it. We\'ll sing it.');
+  var ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', title + ' \u2014 ' + t.createdWith);
+  var ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.setAttribute('content', t.ogDesc);
+
+  // Set html lang attribute
+  document.documentElement.lang = lang;
 
   // Audio
-  const audioSrc = 'https://cdn1.suno.ai/' + encodeURIComponent(id) + '.mp3';
-  const audio = new Audio();
+  var audioSrc = 'https://cdn1.suno.ai/' + encodeURIComponent(id) + '.mp3';
+  var audio = new Audio();
   audio.preload = 'metadata';
   audio.src = audioSrc;
   audio.crossOrigin = 'anonymous';
 
-  let isPlaying = false;
+  var isPlaying = false;
 
-  const vinyl = document.getElementById('vinyl');
-  const tonearm = document.getElementById('tonearm');
-  const playBtn = document.getElementById('playBtn');
-  const playIcon = document.getElementById('playIcon');
-  const pauseIcon = document.getElementById('pauseIcon');
-  const progressBar = document.getElementById('progressBar');
-  const progressFill = document.getElementById('progressFill');
-  const currentTimeEl = document.getElementById('currentTime');
-  const totalTimeEl = document.getElementById('totalTime');
-  const playerMsg = document.getElementById('playerMsg');
+  var vinyl = document.getElementById('vinyl');
+  var tonearm = document.getElementById('tonearm');
+  var playBtn = document.getElementById('playBtn');
+  var playIcon = document.getElementById('playIcon');
+  var pauseIcon = document.getElementById('pauseIcon');
+  var progressBar = document.getElementById('progressBar');
+  var progressFill = document.getElementById('progressFill');
+  var currentTimeEl = document.getElementById('currentTime');
+  var totalTimeEl = document.getElementById('totalTime');
+  var playerMsg = document.getElementById('playerMsg');
+  var saveStatus = document.getElementById('saveStatus');
+
+  // Save help toggle
+  document.getElementById('saveHelpToggle').addEventListener('click', function() {
+    document.getElementById('saveHelp').classList.toggle('open');
+  });
 
   // Build visualizer bars
-  const visualizer = document.getElementById('visualizer');
-  const barCount = 20;
-  const bars = [];
-  for (let i = 0; i < barCount; i++) {
-    const bar = document.createElement('div');
+  var visualizer = document.getElementById('visualizer');
+  var barCount = 20;
+  var bars = [];
+  for (var i = 0; i < barCount; i++) {
+    var bar = document.createElement('div');
     bar.className = 'viz-bar';
     bar.style.setProperty('--delay', (Math.random() * 0.5).toFixed(2) + 's');
     bar.style.setProperty('--dur', (0.3 + Math.random() * 0.5).toFixed(2) + 's');
@@ -839,20 +1028,20 @@ body {
       tonearm.classList.add('playing');
       playIcon.style.display = 'none';
       pauseIcon.style.display = 'block';
-      bars.forEach(b => b.classList.add('active'));
+      bars.forEach(function(b) { b.classList.add('active'); });
     } else {
       vinyl.classList.remove('playing');
       tonearm.classList.remove('playing');
       playIcon.style.display = 'block';
       pauseIcon.style.display = 'none';
-      bars.forEach(b => b.classList.remove('active'));
+      bars.forEach(function(b) { b.classList.remove('active'); });
     }
   }
 
   function formatTime(s) {
     if (!isFinite(s) || s < 0) return '0:00';
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
+    var m = Math.floor(s / 60);
+    var sec = Math.floor(s % 60);
     return m + ':' + (sec < 10 ? '0' : '') + sec;
   }
 
@@ -875,14 +1064,14 @@ body {
 
   audio.addEventListener('timeupdate', function() {
     if (audio.duration) {
-      const pct = (audio.currentTime / audio.duration) * 100;
+      var pct = (audio.currentTime / audio.duration) * 100;
       progressFill.style.width = pct + '%';
       currentTimeEl.textContent = formatTime(audio.currentTime);
     }
   });
 
   audio.addEventListener('waiting', function() {
-    playerMsg.textContent = 'Loading audio...';
+    playerMsg.textContent = t.loadingAudio;
     playerMsg.className = 'player-msg visible';
   });
 
@@ -891,7 +1080,7 @@ body {
   });
 
   audio.addEventListener('error', function() {
-    playerMsg.textContent = 'Could not load song. The file may be unavailable.';
+    playerMsg.textContent = t.audioError;
     playerMsg.className = 'player-msg visible error';
     playBtn.disabled = true;
     playBtn.style.opacity = '0.4';
@@ -901,14 +1090,15 @@ body {
   // Progress bar seeking
   progressBar.addEventListener('click', function(e) {
     if (!audio.duration) return;
-    const rect = progressBar.getBoundingClientRect();
-    const pct = (e.clientX - rect.left) / rect.width;
+    var rect = progressBar.getBoundingClientRect();
+    var pct = (e.clientX - rect.left) / rect.width;
     audio.currentTime = pct * audio.duration;
   });
 
   // Download
   document.getElementById('downloadBtn').addEventListener('click', function() {
-    const a = document.createElement('a');
+    saveStatus.textContent = t.saving;
+    var a = document.createElement('a');
     a.href = audioSrc;
     a.download = title + '.mp3';
     a.target = '_blank';
@@ -916,11 +1106,15 @@ body {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    setTimeout(function() {
+      saveStatus.textContent = t.saved;
+      setTimeout(function() { saveStatus.textContent = ''; }, 2000);
+    }, 1000);
   });
 
   // Share
-  const pageUrl = window.location.href;
-  const shareText = title + ' \u2014 Created with MistiqueAI \ud83c\udfb5\nListen: ' + pageUrl + '\nCreate your own: https://wa.me/15186552535';
+  var pageUrl = window.location.href;
+  var shareText = title + ' \u2014 ' + t.createdWith + ' \ud83c\udfb5\nListen: ' + pageUrl + '\nCreate your own: https://wa.me/15186552535';
 
   document.getElementById('shareWhatsapp').addEventListener('click', function() {
     window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank');
@@ -942,14 +1136,14 @@ body {
     window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText), '_blank');
   });
 
-  var telegramText = title + ' \u2014 Created with MistiqueAI \ud83c\udfb5 Make yours \u2192 https://wa.me/15186552535';
+  var telegramText = t.telegramShare(title);
   document.getElementById('shareTelegram').addEventListener('click', function() {
     window.open('https://t.me/share/url?url=' + encodeURIComponent(pageUrl) + '&text=' + encodeURIComponent(telegramText), '_blank');
   });
 
   document.getElementById('shareCopy').addEventListener('click', function() {
     navigator.clipboard.writeText(pageUrl).then(function() {
-      const tip = document.getElementById('copyTooltip');
+      var tip = document.getElementById('copyTooltip');
       tip.classList.add('show');
       setTimeout(function() { tip.classList.remove('show'); }, 1500);
     });
