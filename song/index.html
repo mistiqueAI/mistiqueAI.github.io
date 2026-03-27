@@ -932,6 +932,7 @@ body {
   // Parse URL params
   var params = new URLSearchParams(window.location.search);
   var id = params.get('id');
+  var directUrl = params.get('url');
   var title = params.get('title') || 'Untitled';
   var style = params.get('style') || 'AI Generated';
   var lang = (params.get('lang') || 'en').toLowerCase();
@@ -946,7 +947,7 @@ body {
   errorState.querySelector('p').textContent = t.songNotFoundDesc;
   errorState.querySelector('a').textContent = t.goHome;
 
-  if (!id) {
+  if (!id && !directUrl) {
     errorState.style.display = 'block';
     return;
   }
@@ -981,8 +982,8 @@ body {
   // Set html lang attribute
   document.documentElement.lang = lang;
 
-  // Audio
-  var audioSrc = 'https://cdn1.suno.ai/' + encodeURIComponent(id) + '.mp3';
+  // Audio — support both direct URL (ShortAPI) and Suno CDN ID
+  var audioSrc = directUrl || ('https://cdn1.suno.ai/' + encodeURIComponent(id) + '.mp3');
   var audio = new Audio();
   audio.preload = 'metadata';
   audio.src = audioSrc;
