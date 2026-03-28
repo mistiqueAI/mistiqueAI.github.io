@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — MistiqueAI</title>
+    <link rel="icon" href="/assets/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #e8c84a;
+            --gold-dark: #b8951f;
+            --dark: #0a0a0a;
+            --dark-card: #111;
+            --text: #e0e0e0;
+            --text-muted: #888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+            z-index: 99999;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 3px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            z-index: 9999;
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .nav-brand-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .nav-brand-text span {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold-light);
+        }
+
+        .nav-cta svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Legal Content */
+        .legal-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 60px;
+        }
+
+        .legal-content h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .legal-content h1 span {
+            color: var(--gold);
+        }
+
+        .legal-content .effective-date {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        .legal-content h2 {
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-top: 36px;
+            margin-bottom: 12px;
+        }
+
+        .legal-content p,
+        .legal-content ul {
+            margin-bottom: 16px;
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .legal-content ul {
+            padding-left: 24px;
+        }
+
+        .legal-content li {
+            margin-bottom: 8px;
+        }
+
+        .legal-content a {
+            color: var(--gold);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .legal-content a:hover {
+            color: var(--gold-light);
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid rgba(212, 175, 55, 0.08);
+            padding: 48px 0 40px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-watermark {
+            width: 60px;
+            opacity: 0.35;
+            margin-bottom: 16px;
+        }
+
+        .footer-copy {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 0.82rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .nav-cta span { display: none; }
+            .nav-cta { padding: 10px 14px; }
+            .legal-content h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <img src="/assets/logo.png" alt="MistiqueAI" class="nav-logo">
+            <div class="nav-brand-text">MISTIQUE <span>AI</span></div>
+        </a>
+        <a href="https://wa.me/15186552535" class="nav-cta" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span>WhatsApp</span>
+        </a>
+    </div>
+</nav>
+
+<main class="legal-content">
+    <h1>Terms of <span>Service</span></h1>
+    <p class="effective-date">Effective Date: March 28, 2026</p>
+
+    <h2>1. Introduction &amp; Acceptance of Terms</h2>
+    <p>Welcome to MistiqueAI. By accessing or using our service, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the service.</p>
+    <p>MistiqueAI is operated by Docofit LLC. Throughout these Terms, "we," "us," and "our" refer to Docofit LLC and MistiqueAI, while "you" and "your" refer to the user of our service.</p>
+    <p>These Terms constitute a legally binding agreement between you and Docofit LLC. Please read them carefully before using MistiqueAI.</p>
+
+    <h2>2. Service Description</h2>
+    <p>MistiqueAI is a WhatsApp-based AI song generation service. Users send song descriptions, prompts, or creative directions via WhatsApp, and our platform uses artificial intelligence technology to generate custom songs based on those inputs.</p>
+    <p>The service is delivered entirely through WhatsApp messaging. By engaging with our WhatsApp number, you initiate the song creation process and interact with our team and AI systems to produce your personalized songs.</p>
+
+    <h2>3. Eligibility</h2>
+    <p>To use MistiqueAI, you must meet the following requirements:</p>
+    <ul>
+        <li>You must be at least 13 years of age to use the service.</li>
+        <li>If you are between 13 and 18 years old, you must have the consent of a parent or legal guardian to use MistiqueAI.</li>
+        <li>You must have access to WhatsApp and a valid phone number.</li>
+        <li>You must have the legal capacity to enter into a binding agreement in your jurisdiction.</li>
+    </ul>
+    <p>By using the service, you represent and warrant that you meet all eligibility requirements outlined above.</p>
+
+    <h2>4. Acceptable Use</h2>
+    <p>You agree to use MistiqueAI only for lawful purposes and in accordance with these Terms. When using our service, you must not:</p>
+    <ul>
+        <li>Use the service for any unlawful, fraudulent, or malicious purpose.</li>
+        <li>Generate content that infringes on the intellectual property rights of any third party, including copyrights, trademarks, or other proprietary rights.</li>
+        <li>Attempt to reverse-engineer, decompile, disassemble, or otherwise exploit the underlying technology or systems of the service.</li>
+        <li>Use the service to generate hateful, violent, threatening, abusive, harassing, defamatory, or sexually explicit content.</li>
+        <li>Spam, flood, or otherwise abuse the WhatsApp messaging system used to deliver the service.</li>
+        <li>Impersonate any person or entity, or misrepresent your affiliation with any person or entity.</li>
+        <li>Use the service in any manner that could damage, disable, overburden, or impair MistiqueAI's operations.</li>
+    </ul>
+    <p>We reserve the right to refuse service, remove content, or terminate accounts at our sole discretion if we determine that your use violates these Terms.</p>
+
+    <h2>5. Intellectual Property</h2>
+    <p>Songs generated through MistiqueAI are created using AI technology, including Suno AI. Please be aware of the following regarding intellectual property:</p>
+    <ul>
+        <li>Upon completion of your order and receipt of payment, you receive a personal, non-exclusive license to use the AI-generated songs for your personal enjoyment and non-commercial purposes, unless a commercial license is explicitly agreed upon.</li>
+        <li>MistiqueAI and Docofit LLC retain all rights to the underlying technology, platform, processes, branding, and service infrastructure.</li>
+        <li>You should not claim AI-generated songs as human-composed works in any context where such a claim would be misleading, deceptive, or fraudulent.</li>
+        <li>The MistiqueAI name, logo, and associated branding elements are the intellectual property of Docofit LLC and may not be used without prior written permission.</li>
+        <li>AI-generated content may be subject to the terms and conditions of the underlying AI technology providers. You acknowledge and accept any applicable third-party terms.</li>
+    </ul>
+
+    <h2>6. Payment &amp; Subscriptions</h2>
+    <p>MistiqueAI operates on a paid service model. The following terms apply to all transactions:</p>
+    <ul>
+        <li>Pricing for song generation and any subscription plans will be communicated to you directly through WhatsApp prior to any charges being incurred.</li>
+        <li>By confirming an order via WhatsApp, you agree to pay the stated price for the requested service.</li>
+        <li>Refund policies will be communicated at the time of purchase. Refund eligibility depends on the nature of the request and whether the song generation process has already begun.</li>
+        <li>We reserve the right to modify our pricing at any time. Any price changes will be communicated to you in advance and will not affect orders that have already been confirmed and paid for.</li>
+        <li>All payments are processed through secure third-party payment providers. MistiqueAI does not store your payment card details.</li>
+    </ul>
+
+    <h2>7. Disclaimers</h2>
+    <p>The MistiqueAI service is provided on an "as is" and "as available" basis, without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+    <ul>
+        <li>AI-generated content may not always meet your expectations in terms of style, quality, lyrics, or musical composition. While we strive to deliver the best results, the nature of AI generation means outcomes can vary.</li>
+        <li>We do not guarantee that the service will be uninterrupted, timely, secure, or error-free.</li>
+        <li>We do not warrant that the results obtained from using the service will be accurate, reliable, or satisfactory.</li>
+        <li>We are not responsible for any delays in delivery caused by factors outside our control, including but not limited to technical issues, third-party service outages, or force majeure events.</li>
+    </ul>
+
+    <h2>8. Limitation of Liability</h2>
+    <p>To the fullest extent permitted by applicable law:</p>
+    <ul>
+        <li>Docofit LLC, its officers, directors, employees, agents, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the service.</li>
+        <li>This includes, without limitation, damages for loss of profits, data, goodwill, or other intangible losses, even if we have been advised of the possibility of such damages.</li>
+        <li>Our total aggregate liability to you for all claims arising out of or related to the service shall not exceed the total amount paid by you to MistiqueAI in the twelve (12) months preceding the event giving rise to the claim.</li>
+        <li>Some jurisdictions do not allow the exclusion or limitation of certain damages. In such jurisdictions, our liability shall be limited to the greatest extent permitted by law.</li>
+    </ul>
+
+    <h2>9. Termination</h2>
+    <p>We may suspend or terminate your access to MistiqueAI at any time, with or without notice, for any reason, including but not limited to:</p>
+    <ul>
+        <li>Violation of these Terms of Service.</li>
+        <li>Engaging in fraudulent, abusive, or illegal activity.</li>
+        <li>Conduct that we determine, in our sole discretion, is harmful to other users, third parties, or the business interests of MistiqueAI or Docofit LLC.</li>
+    </ul>
+    <p>You may stop using the service at any time by ceasing to interact with our WhatsApp service. No formal cancellation process is required for individual song orders.</p>
+    <p>Upon termination, any provisions of these Terms that by their nature should survive will remain in effect, including but not limited to intellectual property provisions, disclaimers, limitations of liability, and governing law.</p>
+
+    <h2>10. Governing Law</h2>
+    <p>These Terms of Service shall be governed by and construed in accordance with the laws of the State of Delaware, United States, without regard to its conflict of law principles.</p>
+    <p>Docofit LLC is incorporated in the State of Delaware. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in the State of Delaware.</p>
+    <p>You agree to submit to the personal jurisdiction of such courts and waive any objection to the exercise of jurisdiction over you by such courts.</p>
+
+    <h2>11. Changes to These Terms</h2>
+    <p>We reserve the right to update, modify, or replace these Terms of Service at any time. When we make material changes, we will:</p>
+    <ul>
+        <li>Update the "Effective Date" at the top of this page.</li>
+        <li>Notify users of material changes through WhatsApp or other reasonable means.</li>
+        <li>Post the updated Terms on our website.</li>
+    </ul>
+    <p>Your continued use of MistiqueAI after any changes to these Terms constitutes your acceptance of the revised Terms. If you do not agree to the updated Terms, you must stop using the service.</p>
+
+    <h2>12. Contact Us</h2>
+    <p>If you have any questions, concerns, or requests regarding these Terms of Service, please contact us:</p>
+    <ul>
+        <li>Email: <a href="mailto:rahib@mistiqueai.io">rahib@mistiqueai.io</a></li>
+        <li>WhatsApp: <a href="https://wa.me/15186552535" target="_blank" rel="noopener">+1 (518) 655-2535</a></li>
+        <li>Operated by: Docofit LLC</li>
+    </ul>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <img src="/assets/watermark.png" alt="MistiqueAI" class="footer-watermark">
+        <p class="footer-copy">&copy; 2025 MistiqueAI. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://wa.me/15186552535" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="https://youtube.com/@MistiqueAI" target="_blank" rel="noopener">YouTube</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms-of-service.html">Terms of Service</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

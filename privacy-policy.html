@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — MistiqueAI</title>
+    <link rel="icon" href="/assets/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #e8c84a;
+            --gold-dark: #b8951f;
+            --dark: #0a0a0a;
+            --dark-card: #111;
+            --text: #e0e0e0;
+            --text-muted: #888;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+            z-index: 99999;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* Nav */
+        .nav {
+            position: fixed;
+            top: 3px;
+            left: 0;
+            right: 0;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212,175,55,0.1);
+            z-index: 9999;
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .nav-brand-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .nav-brand-text span {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold-light);
+        }
+
+        .nav-cta svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Legal Content */
+        .legal-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 24px 60px;
+        }
+
+        .legal-content h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .legal-content h1 span {
+            color: var(--gold);
+        }
+
+        .legal-content .effective-date {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        .legal-content h2 {
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-top: 36px;
+            margin-bottom: 12px;
+        }
+
+        .legal-content p,
+        .legal-content ul {
+            margin-bottom: 16px;
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .legal-content ul {
+            padding-left: 24px;
+        }
+
+        .legal-content li {
+            margin-bottom: 8px;
+        }
+
+        .legal-content a {
+            color: var(--gold);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .legal-content a:hover {
+            color: var(--gold-light);
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid rgba(212,175,55,0.08);
+            padding: 48px 0 40px;
+            text-align: center;
+        }
+
+        .footer .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-watermark {
+            width: 60px;
+            opacity: 0.35;
+            margin-bottom: 16px;
+        }
+
+        .footer-copy {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 0.82rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .nav-cta span { display: none; }
+            .nav-cta { padding: 10px 14px; }
+            .legal-content h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <img src="/assets/logo.png" alt="MistiqueAI" class="nav-logo">
+                <div class="nav-brand-text">MISTIQUE <span>AI</span></div>
+            </a>
+            <a href="https://wa.me/15186552535" class="nav-cta" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span>WhatsApp</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="legal-content">
+        <h1>Privacy <span>Policy</span></h1>
+        <p class="effective-date">Effective Date: March 28, 2026</p>
+
+        <h2>1. Introduction</h2>
+        <p>Welcome to MistiqueAI. MistiqueAI is a WhatsApp-based AI song generation service operated by Docofit LLC ("we," "us," or "our"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you interact with our service through WhatsApp or visit our website. By using our service, you consent to the practices described in this policy.</p>
+
+        <h2>2. Information We Collect</h2>
+        <p>We may collect the following types of information when you use MistiqueAI:</p>
+        <ul>
+            <li><strong>Phone Number</strong> — Your phone number is provided when you message us on WhatsApp and is required to deliver our service to you.</li>
+            <li><strong>Message Content</strong> — The song descriptions, preferences, instructions, and any other text or media you send us through WhatsApp.</li>
+            <li><strong>Generated Songs and Metadata</strong> — The AI-generated songs we create for you, along with associated metadata such as genre, mood, and style parameters.</li>
+            <li><strong>Usage Data</strong> — Timestamps of your interactions, interaction patterns, service usage frequency, and other analytical data related to how you use our service.</li>
+        </ul>
+
+        <h2>3. How We Use Your Information</h2>
+        <p>We use the information we collect for the following purposes:</p>
+        <ul>
+            <li><strong>Service Delivery</strong> — To generate and deliver your custom AI-created songs based on the descriptions and preferences you provide.</li>
+            <li><strong>Service Improvement</strong> — To improve our AI models, algorithms, and overall service quality so we can deliver better results over time.</li>
+            <li><strong>Communication</strong> — To communicate with you about your orders, respond to your inquiries, and provide updates about our service.</li>
+            <li><strong>Legal Compliance</strong> — To comply with applicable laws, regulations, legal processes, or enforceable governmental requests.</li>
+        </ul>
+
+        <h2>4. Third-Party Services</h2>
+        <p>We rely on trusted third-party services to operate MistiqueAI. These providers may have access to certain data as necessary to perform their functions:</p>
+        <ul>
+            <li><strong>Twilio</strong> — We use Twilio as our messaging infrastructure to facilitate WhatsApp communication between you and our service. Twilio may process your phone number and message content. You can review <a href="https://www.twilio.com/legal/privacy" target="_blank" rel="noopener">Twilio's Privacy Policy</a> for more details.</li>
+            <li><strong>Suno AI</strong> — We use Suno AI as our AI music generation platform to create your custom songs. Song descriptions and generation parameters may be shared with Suno AI. You can review <a href="https://suno.com/privacy" target="_blank" rel="noopener">Suno AI's Privacy Policy</a> for more details.</li>
+        </ul>
+        <p>Each third-party service operates under its own privacy policy, and we encourage you to review them. We are not responsible for the privacy practices of these third-party services.</p>
+
+        <h2>5. Data Retention</h2>
+        <p>We retain your information only for as long as necessary to fulfill the purposes described in this policy:</p>
+        <ul>
+            <li><strong>Song Generation Data</strong> — Retained for as long as needed to deliver and support your generated songs and provide ongoing service.</li>
+            <li><strong>Message History</strong> — Retained for 90 days from the date of the interaction, after which it is automatically deleted from our systems.</li>
+            <li><strong>Deletion Requests</strong> — You may request deletion of your data at any time by contacting us at <a href="mailto:rahib@mistiqueai.io">rahib@mistiqueai.io</a>. We will process your request promptly and confirm once your data has been removed.</li>
+        </ul>
+
+        <h2>6. Data Security</h2>
+        <p>We implement reasonable administrative, technical, and physical security measures designed to protect your personal information from unauthorized access, use, alteration, and disclosure. These measures include encryption of data in transit and restricted access controls.</p>
+        <p>However, please be aware that no method of electronic transmission or storage is 100% secure. While we strive to protect your information, we cannot guarantee its absolute security. You use our service at your own risk.</p>
+
+        <h2>7. Your Rights</h2>
+        <p>Depending on your location and applicable laws, you may have the following rights regarding your personal information:</p>
+        <ul>
+            <li><strong>Access</strong> — You may request a copy of the personal data we hold about you.</li>
+            <li><strong>Deletion</strong> — You may request that we delete your personal data from our systems.</li>
+            <li><strong>Opt Out</strong> — You may opt out of non-essential communications from us at any time.</li>
+            <li><strong>Correction</strong> — You may request that we correct any inaccurate personal data we hold about you.</li>
+        </ul>
+        <p>To exercise any of these rights, please contact us at <a href="mailto:rahib@mistiqueai.io">rahib@mistiqueai.io</a>. We will respond to your request within a reasonable timeframe and in accordance with applicable law.</p>
+
+        <h2>8. Children's Privacy</h2>
+        <p>MistiqueAI is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have inadvertently collected personal data from a child under 13, we will take steps to delete that information as soon as possible. If you believe we may have collected information from a child under 13, please contact us immediately at <a href="mailto:rahib@mistiqueai.io">rahib@mistiqueai.io</a>.</p>
+
+        <h2>9. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors. When we make material changes, we will notify users through our WhatsApp service or by posting a prominent notice on our website. The "Effective Date" at the top of this policy indicates when it was last revised. Your continued use of MistiqueAI after any changes constitutes your acceptance of the updated policy.</p>
+
+        <h2>10. Contact Us</h2>
+        <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
+        <ul>
+            <li><strong>Email:</strong> <a href="mailto:rahib@mistiqueai.io">rahib@mistiqueai.io</a></li>
+            <li><strong>Operated by:</strong> Docofit LLC</li>
+        </ul>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <img src="/assets/watermark.png" alt="MistiqueAI" class="footer-watermark">
+            <p class="footer-copy">&copy; 2025 MistiqueAI. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://wa.me/15186552535" target="_blank" rel="noopener">WhatsApp</a>
+                <a href="https://youtube.com/@MistiqueAI" target="_blank" rel="noopener">YouTube</a>
+                <a href="/privacy-policy.html">Privacy Policy</a>
+                <a href="/terms-of-service.html">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
