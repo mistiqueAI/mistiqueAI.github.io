@@ -281,11 +281,11 @@ body {
   height: 100px;
   z-index: 10;
   transform-origin: 85px 15px;
-  transform: rotate(-25deg);
+  transform: rotate(0deg);
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .tonearm.playing {
-  transform: rotate(0deg);
+  transform: rotate(-25deg);
 }
 .tonearm-base {
   position: absolute;
@@ -972,7 +972,9 @@ body {
   document.title = title + ' \u2014 ' + t.createdWith;
   document.getElementById('songTitle').textContent = title;
   document.getElementById('vinylTitle').textContent = title;
-  document.getElementById('songStyle').textContent = style;
+  var styleText = decodeURIComponent(style);
+  if (styleText.length > 30) styleText = styleText.substring(0, 30) + '...';
+  document.getElementById('songStyle').textContent = styleText;
 
   // OG tags
   var ogTitle = document.querySelector('meta[property="og:title"]');
